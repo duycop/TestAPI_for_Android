@@ -4,7 +4,9 @@ web này làm api cho app android: https://57kmt.duckdns.org/android/
 
 Bài tập:
 
-1. Viết app android, sử dụng timer để 30s/lần lấy dữ liệu từ https://57kmt.duckdns.org/android/api.aspx?action=last_id
+1. Viết app android, sử dụng timer để 30s/lần lấy dữ liệu 
+
+   từ https://57kmt.duckdns.org/android/api.aspx?action=last_id
 
 2. Lấy được last_id thì tải dữ liệu về
 
