@@ -3,7 +3,14 @@ $(document).ready(function () {
 	var api = '/android/api.aspx';
 	function post(data, callback) {
 		$.post(api, data, function (json) {
-			callback(json)
+			if (json.ok) {
+				callback(json)
+			} else {
+				$.alert({
+					title: 'Error!',
+					content: json.msg,
+				});
+			}
 		}, 'json');
 	}
 	function add_new() {
@@ -13,28 +20,14 @@ $(document).ready(function () {
 			body: $('#msg_body').val(),
 		}
 		post(data, function (json) {
-			if (json.ok) {
-				reload();
-			} else {
-				$.alert({
-					title: 'Error!',
-					content: json.msg,
-				});
-			}
+			reload();
 		});
 	}
 	function get_last_id() {
 		var data = { action: 'last_id' }
 		post(data, function (json) {
-			if (json.ok) {
-				var html = 'last id = ' + json.id;
-				$('#last-id-here').html(html);
-			} else {
-				$.alert({
-					title: 'Error!',
-					content: json.msg,
-				});
-			}
+			var html = 'last id = ' + json.id;
+			$('#last-id-here').html(html);
 		});
 	}
 	function get_html(json) {
@@ -62,16 +55,12 @@ $(document).ready(function () {
 	}
 	function reload() {
 		post({ action: 'list_all' }, function (json) {
-			if (json.ok && json.data) {
+			if (json.data) {
 				var html = get_html(json);
 				$('#list-all-here').html(html);
 			} else {
 				var msg = json.msg + '. Data: ' + json.data;
 				$('#list-all-here').html(msg);
-				$.alert({
-					title: 'Error!',
-					content: json.msg,
-				});
 			}
 		})
 	}
@@ -81,14 +70,9 @@ $(document).ready(function () {
 			id: $('#msg_id').val(),
 		}
 		post(data, function (json) {
-			if (json.ok && json.data) {
+			if (json.data) {
 				var html = get_html(json);
 				$('#list-one-here').html(html);
-			} else {
-				$.alert({
-					title: 'Error!',
-					content: json.msg,
-				});
 			}
 		});
 	}
