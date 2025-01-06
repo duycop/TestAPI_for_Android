@@ -78,7 +78,7 @@ namespace testAPI.android
                 case "list_all":
                 case "last_id":
                 case "get_id":
-                case "new_id":
+                case "next_id":
                     do_action(action);
                     break;
                 default:

@@ -73,18 +73,18 @@ $(document).ready(function () {
 			}
 		});
 	}
-	function get_new_id() {
+	function get_next_id() {
 		var data = {
-			action: 'new_id',
+			action: 'next_id',
 			id: parseInt($('#msg-last-id').val()),
 		}
 		post(data, function (json) {
-			$('#new-id-here').html('new id=' + json.id);
+			$('#next-id-here').html('next id=' + json.id);
 		});
 	}
 	$('#cmd-add-new-msg').click(function () { add_new_msg(); });
 	$('#cmd-get-last-id').click(function () { get_last_id(); });
-	$('#cmd-get-new-id').click(function () { get_new_id(); });
+	$('#cmd-get-next-id').click(function () { get_next_id(); });
 	$('#cmd-get-one-msg-by-id').click(function () { get_one_msg_by_id(); });
 	$('#cmd-get-all-msg').click(function () { get_all_msg(); });
 	$('#cmd-clear-log').click(function () { $('#log-here').html(''); });

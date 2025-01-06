@@ -91,6 +91,11 @@ BEGIN
 	declare @json nvarchar(max)='';
 	if(@action='add_new')
 	begin
+		if ((@title is null)or(@title='')or(@body is null)or(DATALENGTH(@body) = 0))
+		begin
+			raiserror(N'Phải nhập dữ liệu cho title và body',16,1);
+			return;
+		end
 		insert into msg(title,body)values(@title,@body);
 		select @json=(
 			select 1 as [ok], @action+':ok' as [msg]
@@ -110,23 +115,24 @@ BEGIN
 	end
 	else if(@action='get_id')
 	begin		
-		if not exists(select [id] from [msg] where [id]=@id)
+		if not exists(select id from msg where id=@id)
 		begin
 			raiserror(N'Không tồn tại msg với id=%d',16,1,@id);
 			return;
 		end
 		select @json=(
 			select 1 as [ok], @action+':ok' as [msg],
-			( select  * 
+			( select * 
 			  from msg 
 			  where id=@id
-			  for json path) as [data]
+			  for json path) as [data],
+			  isnull((select top 1 [id] from [msg] where [id]>@id order by [id]),0) as [next_id]
 			for json path, WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
 	else if(@action='new_id')
 	begin		
-		if not exists(select [id] from [msg] where [id]>@id)
+		if not exists(select id from msg where id>@id)
 		begin
 			raiserror(N'Không có msg với id lớn hơn %d',16,1,@id);
 			return;
@@ -145,4 +151,5 @@ BEGIN
 		select @json as [json];
 	end
 END
+
 GO
