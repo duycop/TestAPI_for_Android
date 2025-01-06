@@ -8,7 +8,9 @@ Bài tập:
 
 2. Lấy được last_id thì tải dữ liệu về
 
-  từ https://57kmt.duckdns.org/android/api.aspx?action=get_id&id={last_id} Hiển thị thông báo, âm thanh gây chú ý!
+  từ https://57kmt.duckdns.org/android/api.aspx?action=get_id&id={last_id}
+  
+  Hiển thị thông báo, âm thanh gây chú ý!
 
   (nếu mới hơn last_id đã lưu lần trước) 
 
