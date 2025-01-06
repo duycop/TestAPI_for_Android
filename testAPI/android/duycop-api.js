@@ -6,10 +6,7 @@ $(document).ready(function () {
 			if (json.ok) {
 				callback(json)
 			} else {
-				$.alert({
-					title: 'Error!',
-					content: json.msg,
-				});
+				$.alert({ title: 'Error!', content: json.msg, });
 			}
 		}, 'json');
 	}
@@ -19,15 +16,12 @@ $(document).ready(function () {
 			title: $('#msg_title').val(),
 			body: $('#msg_body').val(),
 		}
-		post(data, function (json) {
-			reload();
-		});
+		post(data, function (json) { reload(); });
 	}
 	function get_last_id() {
 		var data = { action: 'last_id' }
 		post(data, function (json) {
-			var html = 'last id = ' + json.id;
-			$('#last-id-here').html(html);
+			$('#last-id-here').html('last id = ' + json.id);
 		});
 	}
 	function get_html(json) {
@@ -59,7 +53,7 @@ $(document).ready(function () {
 				var html = get_html(json);
 				$('#list-all-here').html(html);
 			} else {
-				var msg = json.msg + '. Data: ' + json.data;
+				var msg = json.msg;
 				$('#list-all-here').html(msg);
 			}
 		})
@@ -73,6 +67,9 @@ $(document).ready(function () {
 			if (json.data) {
 				var html = get_html(json);
 				$('#list-one-here').html(html);
+			} else {
+				var msg = json.msg;
+				$('#list-one-here').html(msg);
 			}
 		});
 	}
