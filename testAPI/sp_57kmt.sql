@@ -130,7 +130,7 @@ BEGIN
 			for json path, WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
-	else if(@action='new_id')
+	else if(@action='next_id')
 	begin		
 		if not exists(select id from msg where id>@id)
 		begin
