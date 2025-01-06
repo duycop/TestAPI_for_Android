@@ -44,7 +44,7 @@ namespace testAPI.android
                         }
                         break;
                     case "get_id":
-                    case "new_id":
+                    case "next_id":
                         using (SqlCommand cmd = new SqlCommand())
                         {
                             cmd.Parameters.Add("@id", SqlDbType.Int).Value = Request["id"];
