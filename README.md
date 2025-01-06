@@ -8,10 +8,10 @@ Bài tập:
 
 2. Lấy được last_id thì tải dữ liệu về
 
-  từ https://57kmt.duckdns.org/android/api.aspx?action=get_id&id={last_id}
-  
-  Hiển thị thông báo, âm thanh gây chú ý!
+   từ https://57kmt.duckdns.org/android/api.aspx?action=get_id&id={last_id}  
 
-  (nếu mới hơn last_id đã lưu lần trước) 
+   Hiển thị thông báo, âm thanh gây chú ý!
+
+   (nếu mới hơn last_id đã lưu lần trước) 
 
 4. Làm xong push lên github, chụp thêm một số ảnh màn hình paste vào readme.md
