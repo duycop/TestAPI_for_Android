@@ -88,7 +88,7 @@ CREATE PROCEDURE [dbo].[SP_MSG]
 	@body ntext=null
 AS
 BEGIN
-	declare @json nvarchar(max)='';
+	declare @json nvarchar(max)='', @next_id int, @last_id int;
 	if(@action='add_new')
 	begin
 		if ((@title is null)or(@title='')or(@body is null)or(DATALENGTH(@body) = 0))
@@ -97,20 +97,13 @@ BEGIN
 			return;
 		end
 		insert into msg(title,body)values(@title,@body);
-		select @json=(
-			select 1 as [ok], @action+':ok' as [msg]
-			for json path, WITHOUT_ARRAY_WRAPPER);
+		select @last_id=(select top 1 [id] from [msg] order by [id] desc);
+		select @json=( select 1 as [ok], @action+':ok' as [msg], @last_id as [last_id] for json path, WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
 	else if(@action='list_all')
 	begin		
-		select @json=(
-			select 1 as [ok], @action+':ok' as [msg],
-			( select TOP 100 * 
-			  from msg 
-			  ORDER BY 1 DESC
-			  for json path) as [data]
-			for json path, WITHOUT_ARRAY_WRAPPER);
+		select @json=( select 1 as [ok], @action+':ok' as [msg], ( select TOP 100 * from msg ORDER BY 1 DESC for json path) as [data] for json path, WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
 	else if(@action='get_id')
@@ -119,43 +112,31 @@ BEGIN
 		begin
 			raiserror(N'Không tồn tại msg với id=%d',16,1,@id);
 			return;
-		end
+		end;
+		select @last_id=(select top 1 [id] from [msg] order by [id] desc),
+			   @next_id=isnull((select top 1 [id] from [msg] where [id]>@id order by [id]),0);
 		select @json=(
-			select 1 as [ok], @action+':ok' as [msg],
-			( select * 
-			  from msg 
-			  where id=@id
-			  for json path) as [data],
-			  isnull((select top 1 [id] from [msg] where [id]>@id order by [id]),0) as [next_id]
+			select 1 as [ok], @action+':ok' as [msg],@next_id as [next_id], @last_id as [last_id], (select *  from msg  where id=@id for json path) as [data]
 			for json path, WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
 	else if(@action='next_id')
 	begin		
-		if not exists(select id from msg where id>@id)
-		begin
-			select @json=(
-			select 0 as [ok], @action+N': lớn hơn last_id rồi' as [msg],0 as [next_id], 
-			            (select top 1 [id] from [msg] order by [id] desc) as [last_id]
-			for json path, WITHOUT_ARRAY_WRAPPER);
-		end
+		select @last_id=(select top 1 [id] from [msg] order by [id] desc),
+			   @next_id=isnull((select top 1 [id] from [msg] where [id]>@id order by [id]),0);
+		if (@next_id=0)
+			select @json=(select 0 as [ok], formatMessage(N'next_id=%d lớn hơn last_id=%d rồi',@id,@last_id) as [msg], @next_id as [next_id], @last_id as [last_id] for json path, WITHOUT_ARRAY_WRAPPER);
 		else
-		select @json=(
-			select 1 as [ok], @action+':ok' as [msg], 
-				   (select top 1 [id] from [msg] where [id]>@id order by [id]) as [next_id],
-				   (select top 1 [id] from [msg] order by [id] desc)           as [last_id]
-			for json path, WITHOUT_ARRAY_WRAPPER);
+			select @json=(select 1 as [ok], @action+':ok' as [msg], @next_id as [next_id], @last_id as [last_id] for json path, WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
 	else if(@action='last_id')
 	begin
-		select @json=(
-			select 1 as [ok], @action+':ok' as [msg], 
-			       (select top 1 [id] from [msg] order by [id] desc) as [last_id]
-		for json path,WITHOUT_ARRAY_WRAPPER);
-
+		set @last_id=(select top 1 [id] from [msg] order by [id] desc);
+		select @json=(select 1 as [ok], @action+':ok' as [msg], @last_id as [last_id] for json path,WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
 END
+
 
 GO

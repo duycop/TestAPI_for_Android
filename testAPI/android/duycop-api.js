@@ -80,6 +80,8 @@ $(document).ready(function () {
 		}
 		post(data, function (json) {
 			$('#next-id-here').html('next id=' + json.next_id);
+			$('#msg-last-id').val(json.next_id);
+			$('#msg-id').val(json.next_id);
 		});
 	}
 	$('#cmd-add-new-msg').click(function () { add_new_msg(); });
@@ -89,5 +91,4 @@ $(document).ready(function () {
 	$('#cmd-get-all-msg').click(function () { get_all_msg(); });
 	$('#cmd-clear-log').click(function () { $('#log-here').html(''); });
 	get_last_id();
-	setTimeout(get_all_msg, 400);
 });
