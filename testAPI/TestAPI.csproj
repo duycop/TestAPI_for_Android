@@ -64,6 +64,7 @@
     <Content Include="android\api.aspx" />
     <Content Include="android\duycop-api.js" />
     <Content Include="android\index.html" />
+    <Content Include="sp_57kmt.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
