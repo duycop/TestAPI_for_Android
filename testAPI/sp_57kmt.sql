@@ -134,18 +134,24 @@ BEGIN
 	begin		
 		if not exists(select id from msg where id>@id)
 		begin
-			raiserror(N'Không có msg với id lớn hơn %d',16,1,@id);
-			return;
+			select @json=(
+			select 0 as [ok], @action+N': lớn hơn last_id rồi' as [msg],0 as [next_id], 
+			            (select top 1 [id] from [msg] order by [id] desc) as [last_id]
+			for json path, WITHOUT_ARRAY_WRAPPER);
 		end
+		else
 		select @json=(
-			select 1 as [ok], @action+':ok' as [msg], (select top 1 [id] from [msg] where [id]>@id order by [id]) as [id]
+			select 1 as [ok], @action+':ok' as [msg], 
+				   (select top 1 [id] from [msg] where [id]>@id order by [id]) as [next_id],
+				   (select top 1 [id] from [msg] order by [id] desc)           as [last_id]
 			for json path, WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
 	else if(@action='last_id')
 	begin
 		select @json=(
-			select 1 as [ok], @action+':ok' as [msg], (select top 1 [id] from [msg] order by [id] desc) as [id]
+			select 1 as [ok], @action+':ok' as [msg], 
+			       (select top 1 [id] from [msg] order by [id] desc) as [last_id]
 		for json path,WITHOUT_ARRAY_WRAPPER);
 
 		select @json as [json];

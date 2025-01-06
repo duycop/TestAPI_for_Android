@@ -23,7 +23,7 @@ $(document).ready(function () {
 	function get_last_id() {
 		var data = { action: 'last_id' }
 		post(data, function (json) {
-			$('#last-id-here').html('last id = ' + json.id);
+			$('#last-id-here').html('last id = ' + json.last_id);
 		});
 	}
 	function json_to_html(json) {
@@ -79,7 +79,7 @@ $(document).ready(function () {
 			id: parseInt($('#msg-last-id').val()),
 		}
 		post(data, function (json) {
-			$('#next-id-here').html('next id=' + json.id);
+			$('#next-id-here').html('next id=' + json.next_id);
 		});
 	}
 	$('#cmd-add-new-msg').click(function () { add_new_msg(); });
