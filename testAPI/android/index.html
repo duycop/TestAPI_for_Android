@@ -22,6 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <link href="duycop-css.css" rel="stylesheet" />
     <script src="duycop-api.js"></script>
 </head>
 <body>
@@ -41,47 +42,71 @@
             </p>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <b>ADD NEW:</b>
+            <div class="col-md-8">
                 <div class="row">
-                    <div class="col-md-3 mt-1">
-                        <input class="form-control" type="text" id="msg_title" placeholder="title" />
+                    <div class="col-md-12">
+                        <b>ADD NEW:</b>
+                        <div class="row">
+                            <div class="col-md-3 mt-1">
+                                <input class="form-control" type="text" id="msg-title" placeholder="title" />
+                            </div>
+                            <div class="col-md-8 mt-1">
+                                <input class="form-control" type="text" id="msg-body" placeholder="full message" />
+                            </div>
+                            <div class="col-md-1 mt-1">
+                                <button class="btn btn-primary w-100" id="cmd-add-new-msg">ADD</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-8 mt-1">
-                        <input class="form-control" type="text" id="msg_body" placeholder="full message" />
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <b>GET LAST ID:</b>
+                        <button id="cmd-get-last-id" class="btn btn-primary mt-1">GET LAST ID</button>
+                        <span id="last-id-here"></span>
                     </div>
-                    <div class="col-md-1 mt-1">
-                        <button class="btn btn-primary w-100" id="cmd-add-new">ADD</button>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <b>GET NEW ID:</b>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">last_id</span>
+                                    <input id="msg-last-id" type="number" class="form-control" placeholder="last_id">
+                                    <button id="cmd-get-new-id" class="btn btn-primary">GET NEW ID</button>
+                                    <span class="input-group-text" id="new-id-here">last_id</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <b>GET ONE MSG BY ID:</b>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">msg id</span>
+                                    <input class="form-control" type="number" id="msg-id" placeholder="id" />
+                                    <button class="btn btn-primary" id="cmd-get-one-msg-by-id">GET&nbsp;ONE</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2" id="list-one-here"></div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <b>GET ALL MSG:</b>
+                        <button id="cmd-get-all-msg" class="btn btn-primary">GET ALL</button>
+                        <div class="mt-2" id="list-all-here"></div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-12">
-                <b>GET LAST ID:</b>
-                <input type="submit" id="cmd-last-id" value="GET LAST ID" class="btn btn-primary mt-1" />
-                <span id="last-id-here"></span>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-12">
-                <b>GET ONE:</b>
-                <div class="row">
-                    <div class="col-md-2 mt-1">
-                        <input class="form-control" type="number" id="msg_id" placeholder="id" />
-                    </div>
-                    <div class="col-md-1 mt-1">
-                        <button class="btn btn-primary w-100" id="cmd-get-id">GET&nbsp;ONE</button>
-                    </div>
-                </div>
-                <div class="mt-2" id="list-one-here"></div>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-12">
-                <b>LIST ALL:</b>
-                <button id="cmd-reload" class="btn btn-primary">RELOAD</button>
-                <div class="mt-2" id="list-all-here"></div>
+            <div class="col-md-4 mt-2">
+                <b>LOG HERE</b> TX=Transmit=Truyền dữ liệu; RX=Receive=Nhận dữ liệu  <button id="cmd-clear-log" class="btn btn-primary">Clear Log</button>
+                <div id="log-here"></div>
             </div>
         </div>
     </div>

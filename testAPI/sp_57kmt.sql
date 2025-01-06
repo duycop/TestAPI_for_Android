@@ -110,9 +110,9 @@ BEGIN
 	end
 	else if(@action='get_id')
 	begin		
-		if not exists(select id from msg where id=@id)
+		if not exists(select [id] from [msg] where [id]=@id)
 		begin
-			raiserror(N'Không tồn tại id=%d',16,1,@id);
+			raiserror(N'Không tồn tại msg với id=%d',16,1,@id);
 			return;
 		end
 		select @json=(
@@ -124,13 +124,22 @@ BEGIN
 			for json path, WITHOUT_ARRAY_WRAPPER);
 		select @json as [json];
 	end
+	else if(@action='new_id')
+	begin		
+		if not exists(select [id] from [msg] where [id]>@id)
+		begin
+			raiserror(N'Không có msg với id lớn hơn %d',16,1,@id);
+			return;
+		end
+		select @json=(
+			select 1 as [ok], @action+':ok' as [msg], (select top 1 [id] from [msg] where [id]>@id order by [id]) as [id]
+			for json path, WITHOUT_ARRAY_WRAPPER);
+		select @json as [json];
+	end
 	else if(@action='last_id')
 	begin
 		select @json=(
-			select 1 as [ok], @action+':ok' as [msg],
-			(select top 1 id 
-			from msg
-			order by id desc) as [id]
+			select 1 as [ok], @action+':ok' as [msg], (select top 1 [id] from [msg] order by [id] desc) as [id]
 		for json path,WITHOUT_ARRAY_WRAPPER);
 
 		select @json as [json];

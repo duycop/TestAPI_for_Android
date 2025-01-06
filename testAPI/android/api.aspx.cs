@@ -44,6 +44,7 @@ namespace testAPI.android
                         }
                         break;
                     case "get_id":
+                    case "new_id":
                         using (SqlCommand cmd = new SqlCommand())
                         {
                             cmd.Parameters.Add("@id", SqlDbType.Int).Value = Request["id"];
@@ -77,6 +78,7 @@ namespace testAPI.android
                 case "list_all":
                 case "last_id":
                 case "get_id":
+                case "new_id":
                     do_action(action);
                     break;
                 default:

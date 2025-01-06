@@ -2,19 +2,21 @@
 $(document).ready(function () {
 	var api = '/android/api.aspx';
 	function post(data, callback) {
+		$('#log-here').append('<b>TX:</b> ' + JSON.stringify(data) +'<br>');
 		$.post(api, data, function (json) {
+			$('#log-here').append('<b>RX:</b>' + JSON.stringify(json) +'<br>');
 			if (json.ok) {
 				callback(json)
 			} else {
-				$.alert({ title: 'Error!', content: json.msg, });
+				$.alert({ title: 'Error!', content: json.msg });
 			}
 		}, 'json');
 	}
-	function add_new() {
+	function add_new_msg() {
 		var data = {
 			action: 'add_new',
-			title: $('#msg_title').val(),
-			body: $('#msg_body').val(),
+			title: $('#msg-title').val(),
+			body: $('#msg-body').val(),
 		}
 		post(data, function (json) { reload(); });
 	}
@@ -24,58 +26,68 @@ $(document).ready(function () {
 			$('#last-id-here').html('last id = ' + json.id);
 		});
 	}
-	function get_html(json) {
+	function json_to_html(json) {
 		var html = '<div class="table-responsive">' +
 			'<table class="table table-bordered table-hover">' +
 			'<thead>' +
 			'<tr class="table-info">' +
-			'<th>ID</th>' +
-			'<th>Title</th>' +
+			'<th width="5%" class="text-center">ID</th>' +
+			'<th width="25%">Title</th>' +
 			'<th>Body</th>' +
-			'<th>Time</th>' +
+			'<th width="25%" class="text-center">Time</th>' +
 			'</tr>' +
 			'</thead>' +
 			'<tbody>';
 		for (var item of json.data) {
 			html += '<tr>' +
-				`<td>${item.id}</td>` +
+				`<td class="text-center">${item.id}</td>` +
 				`<td>${item.title}</td>` +
 				`<td>${item.body}</td>` +
-				`<td>${item.time.replace('T', ' ')}</td>` +
+				`<td class="text-center">${item.time.replace('T', ' ')}</td>` +
 				'</tr>';
 		}
 		html += '</tbody></table></div>';
 		return html;
 	}
-	function reload() {
+	function get_all_msg() {
 		post({ action: 'list_all' }, function (json) {
 			if (json.data) {
-				var html = get_html(json);
+				var html = json_to_html(json);
 				$('#list-all-here').html(html);
 			} else {
-				var msg = json.msg;
-				$('#list-all-here').html(msg);
+				$('#list-all-here').html(json.msg);
 			}
 		})
 	}
-	function get_id() {
+	function get_one_msg_by_id() {
 		var data = {
 			action: 'get_id',
-			id: $('#msg_id').val(),
+			id: parseInt($('#msg-id').val()),
 		}
 		post(data, function (json) {
 			if (json.data) {
-				var html = get_html(json);
+				var html = json_to_html(json);
 				$('#list-one-here').html(html);
 			} else {
-				var msg = json.msg;
-				$('#list-one-here').html(msg);
+				$('#list-one-here').html(json.msg);
 			}
 		});
 	}
-	$('#cmd-add-new').click(function () { add_new(); });
-	$('#cmd-last-id').click(function () { get_last_id(); });
-	$('#cmd-reload').click(function () { reload(); });
-	$('#cmd-get-id').click(function () { get_id(); });
-	reload();
+	function get_new_id() {
+		var data = {
+			action: 'new_id',
+			id: parseInt($('#msg-last-id').val()),
+		}
+		post(data, function (json) {
+			$('#new-id-here').html('new id=' + json.id);
+		});
+	}
+	$('#cmd-add-new-msg').click(function () { add_new_msg(); });
+	$('#cmd-get-last-id').click(function () { get_last_id(); });
+	$('#cmd-get-new-id').click(function () { get_new_id(); });
+	$('#cmd-get-one-msg-by-id').click(function () { get_one_msg_by_id(); });
+	$('#cmd-get-all-msg').click(function () { get_all_msg(); });
+	$('#cmd-clear-log').click(function () { $('#log-here').html(''); });
+	get_last_id();
+	setTimeout(get_all_msg, 400);
 });
